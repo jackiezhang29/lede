@@ -1,16 +1,14 @@
 -- Copyright (C) 2017 yushi studio <ywb94@qq.com> github.com/ywb94
 -- Copyright (C) 2018 lean <coolsnowwolf@gmail.com> github.com/coolsnowwolf
 -- Licensed to the public under the GNU General Public License v3.
-
+require "luci.model.uci"
 local m, s, sec, o, kcp_enable
 local shadowsocksr = "shadowsocksr"
 local uci = luci.model.uci.cursor()
 
-local sys = require "luci.sys"
-
 m = Map(shadowsocksr, translate("ShadowSocksR Plus+ Settings"))
 
-m:section(SimpleSection).template  = "shadowsocksr/status"
+m:section(SimpleSection).template = "shadowsocksr/status"
 
 local server_table = {}
 uci:foreach(shadowsocksr, "servers", function(s)
@@ -44,9 +42,10 @@ o:value("same", translate("Same as Global Server"))
 for _,key in pairs(key_table) do o:value(key,server_table[key]) end
 
 o = s:option(ListValue, "netflix_server", translate("Netflix Node"))
+o:value("nil", translate("Disable"))
 o:value("same", translate("Same as Global Server"))
 for _,key in pairs(key_table) do o:value(key,server_table[key]) end
-o.default = "same"
+o.default = "nil"
 o.rmempty = false
 
 o = s:option(Flag, "netflix_proxy", translate("External Proxy Mode"))
@@ -104,3 +103,5 @@ o:depends("pdnsd_enable", "2")
 o.description = translate("Custom DNS Server format as IP:PORT (default: 8.8.4.4:53)")
 
 return m
+
+
