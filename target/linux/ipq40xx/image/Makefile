@@ -204,6 +204,24 @@ define Device/asus_rt-ac58u
 endef
 TARGET_DEVICES += asus_rt-ac58u
 
+define Device/asus_rt-acrh17
+	$(call Device/FitImageLzma)
+	DEVICE_VENDOR := ASUS
+	DEVICE_MODEL := RT-ACRH17
+	SOC := qcom-ipq4019
+	BLOCKSIZE := 128k
+	PAGESIZE := 2048
+	DTB_SIZE := 65536
+	IMAGE_SIZE := 20439364
+	FILESYSTEMS := squashfs
+	UIMAGE_NAME:=$(shell echo -e '\03\01\01\01RT-AC82U')
+	KERNEL_INITRAMFS := $$(KERNEL) | uImage none
+	KERNEL_INITRAMFS_SUFFIX := -factory.trx
+	IMAGES := sysupgrade.bin
+	DEVICE_PACKAGES := ath10k-firmware-qca9984-ct ipq-wifi-asus_rt-acrh17 kmod-usb-ledtrig-usbport
+endef
+TARGET_DEVICES += asus_rt-acrh17
+
 define Device/avm_fritzbox-4040
 	$(call Device/FitImageLzma)
 	DEVICE_VENDOR := AVM
@@ -603,6 +621,35 @@ define Device/qcom_ap-dk04.1-c1
 	BOARD_NAME := ap-dk04.1-c1
 endef
 TARGET_DEVICES += qcom_ap-dk04.1-c1
+
+define Device/p2w_r619ac
+	$(call Device/FitzImage)
+	$(call Device/UbiFit)
+	DEVICE_VENDOR := P&W
+	DEVICE_MODEL := R619AC
+	SOC := qcom-ipq4019
+	DEVICE_DTS_CONFIG := config@10
+	BLOCKSIZE := 128k
+	PAGESIZE := 2048
+	IMAGES += nand-factory.bin
+	IMAGE/nand-factory.bin := append-ubi | qsdk-ipq-factory-nand
+	DEVICE_PACKAGES := ipq-wifi-p2w_r619ac
+endef
+TARGET_DEVICES += p2w_r619ac
+
+define Device/p2w_r619ac-128m
+	$(call Device/FitzImage)
+	$(call Device/UbiFit)
+	DEVICE_VENDOR := P&W
+	DEVICE_MODEL := R619AC
+	DEVICE_VARIANT := 128M
+	SOC := qcom-ipq4019
+	DEVICE_DTS_CONFIG := config@10
+	BLOCKSIZE := 128k
+	PAGESIZE := 2048
+	DEVICE_PACKAGES := ipq-wifi-p2w_r619ac
+endef
+TARGET_DEVICES += p2w_r619ac-128m
 
 define Device/qxwlan_e2600ac-c1
 	$(call Device/FitImage)
